@@ -20,8 +20,8 @@ $\antidiagmat[fences=v,mask=\cdot]{1,2,3,4}$
 ![image](https://user-images.githubusercontent.com/7012463/201358557-678a6824-74c9-4dae-8a9a-81be0c26fd1d.png)
 
 ## Options
-`fences`: accept one of the following value: `p`,`b`,`v`,`B`, which corresponds to `pmatrix`,`bmatrix`,`vmatrix`,`Bmatrix` in `amsmath`. Default: `p`.
-`mask`: entries which are not on the (anti)-diagonal line. Default: empty.
+* `fences`: accept one of the following value: `p`,`b`,`v`,`B`, which corresponds to `pmatrix`,`bmatrix`,`vmatrix`,`Bmatrix` in `amsmath`. Default: `p`.
+* `mask`: entries which are not on the (anti)-diagonal line. Default: empty.
 
 ## Credits
 All credits are [Enrico Gregorio](https://tex.stackexchange.com/users/4427/egreg)'s. All bugs are mine.
