@@ -1,0 +1,92 @@
+\NeedsTeXFormat{LaTeX2e}
+\RequirePackage{expl3,amsmath,xparse}
+\ProvidesExplPackage{diagmat}{2022/11/10}{0.1}{Generate (anti)-diagonal matrices easily}
+%Based on https://tex.stackexchange.com/a/539741/107173
+%All credit goes to the original author
+%All bugs are mine
+
+\keys_define:nn { diagmat_optional_keys } {
+    fences.choice:,
+    fences.default:n = {p},
+    fences/ .code:n =\tl_set:Nn \l_diagmat_fences_tl {p},
+    fences/p.code:n = \tl_set:Nn \l_diagmat_fences_tl {p},
+    fences/b.code:n = \tl_set:Nn \l_diagmat_fences_tl {b},
+    fences/B.code:n = \tl_set:Nn \l_diagmat_fences_tl {B},
+    fences/v.code:n = \tl_set:Nn \l_diagmat_fences_tl {v},
+    mask.tl_set:N  = \l_diagmat_mask_tl,
+    mask.default:n = {}
+}
+
+\NewDocumentCommand{\diagmat}{O{}m}
+{
+    \tl_set:Nn \l_diagmat_fences_tl {p}
+    \keys_set:nn { diagmat_optional_keys }{ #1 }
+    \egreg_diagmat:nn { \l_diagmat_fences_tl } { #2 }
+}
+
+\seq_new:N \l__egreg_diagmat_entries_seq
+\seq_new:N \l__egreg_diagmat_row_seq
+
+\cs_new_protected:Nn \egreg_diagmat:nn
+{
+    \seq_set_from_clist:Nn \l__egreg_diagmat_entries_seq { #2 }
+    \begin{#1matrix}
+    \int_step_function:nN { \seq_count:N \l__egreg_diagmat_entries_seq } \__egreg_diagmat:n
+    \end{#1matrix}
+}
+
+\cs_new_protected:Nn \__egreg_diagmat:n
+{% #1 = row number
+    \seq_clear:N \l__egreg_diagmat_row_seq
+    \int_step_inline:nn { \seq_count:N \l__egreg_diagmat_entries_seq }
+    {
+    \int_compare:nTF { #1 == ##1 }
+    {
+        \seq_put_right:Nx \l__egreg_diagmat_row_seq
+        {
+            \seq_item:Nn \l__egreg_diagmat_entries_seq { #1 }
+        }
+    }
+    {
+        \seq_put_right:Nn \l__egreg_diagmat_row_seq { \l_diagmat_mask_tl }
+    }
+    }
+    \seq_use:Nn \l__egreg_diagmat_row_seq { & } \\
+}
+
+\NewDocumentCommand{\antidiagmat}{O{}m}
+{
+    \tl_set:Nn \l_diagmat_fences_tl {p}
+    \keys_set:nn { diagmat_optional_keys }{ #1 }
+    \egreg_antidiagmat:nn { \l_diagmat_fences_tl } { #2 }
+}
+
+\seq_new:N \l__egreg_antidiagmat_entries_seq
+\seq_new:N \l__egreg_antidiagmat_row_seq
+
+\cs_new_protected:Nn \egreg_antidiagmat:nn
+{
+    \seq_set_from_clist:Nn \l__egreg_antidiagmat_entries_seq { #2 }
+    \begin{#1matrix}
+    \int_step_function:nN { \seq_count:N \l__egreg_antidiagmat_entries_seq } \__egreg_antidiagmat:n
+    \end{#1matrix}
+}
+
+\cs_new_protected:Nn \__egreg_antidiagmat:n
+{% #1 = row number
+    \seq_clear:N \l__egreg_antidiagmat_row_seq
+    \int_step_inline:nn { \seq_count:N \l__egreg_antidiagmat_entries_seq }
+    {
+        \int_compare:nTF { #1 + ##1==\seq_count:N \l__egreg_antidiagmat_entries_seq+1 }
+    {
+        \seq_put_right:Nx \l__egreg_antidiagmat_row_seq
+        {
+            \seq_item:Nn \l__egreg_antidiagmat_entries_seq { #1 }
+        }
+    }
+        {
+            \seq_put_right:Nn \l__egreg_antidiagmat_row_seq { \l_diagmat_mask_tl }
+        }
+    }
+        \seq_use:Nn \l__egreg_antidiagmat_row_seq { & } \\
+}
