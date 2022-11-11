@@ -21,7 +21,7 @@ $\antidiagmat[fences=v,mask=\cdot]{1,2,3,4}$
 
 ## Options
 * `fences`: accept one of the following value: `p`,`b`,`v`,`B`, which corresponds to `pmatrix`,`bmatrix`,`vmatrix`,`Bmatrix` in `amsmath`. Default: `p`.
-* `mask`: entries which are not on the (anti)-diagonal line. Default: empty.
+* `mask`: entries which are not on the (anti-)diagonal line. Default: empty.
 
 ## Credits
 All credits are [Enrico Gregorio](https://tex.stackexchange.com/users/4427/egreg)'s. All bugs are mine.
